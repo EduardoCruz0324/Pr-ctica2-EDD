@@ -1,5 +1,6 @@
 package edd.src.Estructuras;
 
+import java.util.List;
 import java.util.Scanner;
 
 import javax.security.sasl.AuthorizeCallback;
@@ -7,7 +8,12 @@ import javax.security.sasl.AuthorizeCallback;
 public class Practica2 {
 
     
-
+    /* 
+    El método torresHanoi, se hizo implementado la estructura de control de pilas.
+    Tomamos como referencia principal la cantida de Discos que el usuario nos pida.
+    Para que funcionara lo que hicmos fue analizar los diferentes casos posibles y que el programa fuera buscando correctamente el destino
+    de culquier disco, siguiendo las reglas originales de torres de Hanoi.
+    */
     public static void torresHanoi(int cantidadDiscos, Pila<Integer> origen, Pila<Integer> auxiliar, Pila<Integer> destino) {
         // No olvides imprimir cada paso de la solución.
         int nm = (int) (Math.pow(2, cantidadDiscos) - 1);
@@ -175,13 +181,40 @@ public class Practica2 {
         System.out.println("Existieron "+nm+" movimientos");
     }
 
-
+    /* 
+    El método binarioColas, se hizo implementado la estructura de control de colas.
+    Tomamos como referencia principal la cantida de números que queremos convertir.
+    Para que funcionara lo que hicmos fue analizar los diferentes casos posibles y analizando el patrón
+    de la conversión de números binarios a decimales.
+    */
     public static void binarioColas(int N) {
         
-        /*for(int i = 0; i <= N; i++){
-            String a = Integer.toBinaryString(i);
-            System.out.println(" "+i+"-> "+a);
-        }*/
+        String x = " ";
+        Cola<String> ini = new Cola<String>();
+        
+        for(int i = 0; i <= N; i++){
+            
+            if(i == 0){
+                ini.push("0");
+                System.out.println("-> "+i+" en binario es: "+ini.pop());
+
+            }else if(i == 1){
+                ini.push("1");
+                x = ini.peek();
+                System.out.println("-> "+i+" en binario es: "+ini.pop());
+
+            }else{
+                String m = x + "0";
+                ini.push(m);
+
+                String n = x + "1";
+                ini.push(n);
+
+                x = ini.peek();
+                System.out.println("-> "+i+" en binario es: "+ini.pop());
+            }    
+        }
+
     }
 
     public static void main(String[] args) {
@@ -206,7 +239,10 @@ public class Practica2 {
         origen.push(2);
         origen.push(1);
 	
-        torresHanoi(5, origen, auxiliar, destino); //AQUÍ
+        //torresHanoi(5, origen, auxiliar, destino); //AQUÍ
+
+
+        binarioColas(25);
 
         /*for (int i = 0; i < 3; i++) {
             origen.push(i);

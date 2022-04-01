@@ -41,7 +41,6 @@ public class Mondrian extends AC {
                 } else if (aux1 > 6 && aux1 <= 8) {
                     Maux2[i][j] = 4; // Rojo
                 } else {
-
                     Maux2[i][j] = 2; // Blanco
                 }
             }
@@ -63,14 +62,15 @@ public class Mondrian extends AC {
 
         //Creamos una pila y una cola para que te diviertas joven Artista. 
         Pila<Integer> pila = new Pila<Integer>();
+        pila.push(2);
+        pila.pop();
+        pila.push(pila.pop());
         Pila<Integer> cola = new Pila<Integer>();
         
         //La matriz Maux2 Contiene el estado actual de la matriz.
         //La matriz CopiaM es una matriz copia de Maux2 donde debes poner los nuevos valores
         
         // Aqui va tu codigo  
-        
-
 
 
         for (int i = 0; i < Maux2.length; i++) { // Fors que arreglan la matriz a regresar en la copia.

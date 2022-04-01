@@ -1,7 +1,7 @@
 package edd.src.Estructuras;
 
 public class Cola<T> extends PushPop<T>{
-     // Agregar al inicio.
+     // Agregar al final.
      public void push(T elemento){
         if(elemento == null){
             throw new IllegalArgumentException("");
@@ -42,10 +42,10 @@ public class Cola<T> extends PushPop<T>{
         if (this.isEmpty()) {
             return "";
         }
-        String regreso = this.ultimo.elemento.toString();
-        Nodo n = this.ultimo;
+        String regreso = this.cabeza.elemento.toString();
+        Nodo n = this.cabeza;
         while (n.siguiente != null) {
-            regreso += n.siguiente.elemento.toString() + ", " ;
+            regreso += " - " + n.siguiente.elemento.toString();
             n = n.siguiente;
         }
         return regreso;

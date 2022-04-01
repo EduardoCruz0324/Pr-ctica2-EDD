@@ -83,12 +83,12 @@ public abstract class PushPop<T> {
 
     @Override public boolean equals(Object o) {
         if (o == null || this.getClass() != o.getClass()) {
-            System.out.println("Ejemplares distintos");
+            //System.out.println("Ejemplares distintos");
             return false;
         }
         @SuppressWarnings("unchecked") PushPop<T> pp = (PushPop<T>)o;
         if (this.longi != pp.longi) {
-            System.out.println("Los tamaños no son iguales.");
+            //System.out.println("Los tamaños no son iguales.");
             return false;
         }
         if (this.isEmpty() && pp.isEmpty()) {

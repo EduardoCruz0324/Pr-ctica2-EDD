@@ -4,6 +4,7 @@ public class Pila<T> extends PushPop<T>{
     
     
     // Agregar al inicio.
+    @Override
     public void push(T elemento){
         if(elemento == null){
             throw new IllegalArgumentException("");
@@ -47,7 +48,7 @@ public class Pila<T> extends PushPop<T>{
         String regreso = this.cabeza.elemento.toString();
         Nodo n = this.cabeza;
         while (n.siguiente != null) {
-            regreso += ", " + n.siguiente.elemento.toString();
+            regreso += " - " + n.siguiente.elemento.toString();
             n = n.siguiente;
         }
         return regreso;

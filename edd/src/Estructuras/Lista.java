@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 public class Lista<T> implements Collection<T> {
 
-    // Clase Nodo
+    //----------------------------Nodo---------------------------
     private class Nodo {
         public T elemento;
         public Nodo anterior;
@@ -16,30 +16,37 @@ public class Lista<T> implements Collection<T> {
         public Nodo(T elemento){
             this.elemento = elemento;
         }
+        
     }
 
-    // Iterador
+    //----------------------------Iterador---------------------------
     private class Iterador implements IteradorLista<T> {
         public Nodo anterior;
-        public Nodo siguiente; 
+        public Nodo siguiente;
+        public Nodo actual;
 
         public Iterador(){
-            siguiente = cabeza;
+            actual = cabeza;
+            siguiente = cabeza.siguiente;
         }
 
-        @Override public boolean hasNext(){
+        
+
+        @Override
+        public boolean hasNext(){
             return siguiente != null;
         }
 
-        @Override public T next(){
+        @Override
+        public T next(){
             if(!hasNext())
                 throw new NoSuchElementException();
+
             T regresar = siguiente.elemento;
             
             this.anterior = this.siguiente ;
             this.siguiente=siguiente.siguiente;
             return regresar;
-
         }
         
         @Override
@@ -67,15 +74,17 @@ public class Lista<T> implements Collection<T> {
         
         @Override
         public void end() {
-            this.anterior = ultimo;
+            this.anterior = cola;
             this.siguiente = null;
         }
         
     }
-
+    
+    //----------------------------Lista---------------------------
+    
     private Nodo cabeza;
-    private Nodo ultimo;
-    private int longi;
+    private Nodo cola;
+    private int longitud;
     
     /**
      * Agrega un elemento a la lista.
@@ -106,13 +115,13 @@ public class Lista<T> implements Collection<T> {
         }
         Nodo nuevo = new Nodo(elemento);
         if (cabeza == null) {
-            this.cabeza = this.ultimo = nuevo;
+            this.cabeza = this.cola = nuevo;
         } else {
             this.cabeza.anterior = nuevo;
             nuevo.siguiente = this.cabeza;
             this.cabeza = nuevo;
         }
-        longi++;
+        longitud++;
     }
 
     /**
@@ -128,20 +137,20 @@ public class Lista<T> implements Collection<T> {
         }
         Nodo nuevo = new Nodo(elemento);
         if(cabeza == null){
-            this.cabeza = this.ultimo = nuevo;
+            this.cabeza = this.cola = nuevo;
         }
         else{
-            this.ultimo.siguiente = nuevo;
-            nuevo.anterior = this.ultimo;
-            this.ultimo = nuevo;
+            this.cola.siguiente = nuevo;
+            nuevo.anterior = this.cola;
+            this.cola = nuevo;
         }
-        longi++;
+        longitud++;
     }
 
     private Nodo buscaElemento(T elemento){
         Nodo n = cabeza;
         while(n !=null){
-            if (elemento.equals(n.elemento)) {
+            if(elemento.equals(n.elemento)) {
                 return n;
             }
             n=n.siguiente;
@@ -158,44 +167,48 @@ public class Lista<T> implements Collection<T> {
         if(elemento == null)
             return false;
         Nodo n = buscaElemento(elemento);
+
         if(n==null){
             return false;
         }
-        if(longi == 1){
+
+        if(longitud == 1){
             empty();
             return true;
         }
+
         if (n == cabeza) {
             cabeza = cabeza.siguiente;
             cabeza.anterior = null;
-            longi --;
+            longitud --;
             return true;
         }
-        if (n == ultimo) {
-            ultimo = ultimo.anterior;
-            ultimo.siguiente = null;
-            longi --;
+        if (n == cola) {
+            cola = cola.anterior;
+            cola.siguiente = null;
+            longitud --;
             return true;
         }
+
         n.siguiente.anterior = n.anterior;
         n.anterior.siguiente = n.siguiente;
-        longi --;
+        longitud --;
         return true;
     }    
 
 
 
     /**
-     * Regresa un elemento de la lista. (Ultimo)
+     * Regresa un elemento de la lista. (cola)
      * y lo elimina.
      * 
      * @return El elemento a sacar.
      */
     public T pop(){
-        T valor = ultimo.elemento;
-        ultimo = ultimo.anterior;
-        ultimo.siguiente = null;
-        longi --;
+        T valor = cola.elemento;
+        cola = cola.anterior;
+        cola.siguiente = null;
+        longitud --;
         return valor;
     }
 
@@ -205,7 +218,7 @@ public class Lista<T> implements Collection<T> {
      * @return el número de elementos en la lista.
      */
     public int size(){
-        return longi;
+        return longitud;
     }
 
     /**
@@ -228,8 +241,8 @@ public class Lista<T> implements Collection<T> {
      * 
      */
     public void empty(){
-        cabeza =ultimo= null;
-        longi = 0;
+        cabeza = cola = null;
+        longitud = 0;
     }
 
     /**
@@ -239,10 +252,8 @@ public class Lista<T> implements Collection<T> {
      *         otro caso.
      */
     public boolean isEmpty(){
-        return longi == 0;
+        return longitud == 0;
     }
-
-    
 
     /**
      * Regresa una copia de la lista.
@@ -266,43 +277,80 @@ public class Lista<T> implements Collection<T> {
      * @return <tt>true</tt> si la coleccion es igual a la coleccion recibido
      *         <tt>false</tt> en otro caso.
      */
-    @Override public boolean equals(Object o){
-        if (!(o instanceof Lista) ) {
-            System.out.println("El ejemplar no es una lista");
-            return false;
-        }
-        @SuppressWarnings("unchecked") Lista<T> lista2 = (Lista<T>)o;
-        if (this.longi != lista2.longi) {
-            System.out.println("Los tamaños no son iguales.");
-            return false;
-        }
-        if(this.isEmpty() && lista2.isEmpty()){
+    public boolean equals(Collection<T> coleccion){
+        // lo vemos en clase
+        if(coleccion instanceof Lista) {
             return true;
         }
-        if( (this.isEmpty() && !lista2.isEmpty()) || (lista2.isEmpty() && !this.isEmpty())){
-            return false;
-        }
-        Nodo aux1 = this.cabeza;
-        Nodo aux2 = lista2.cabeza;
-        while (aux1!= null && aux2 != null)  {
-            if (!aux1.elemento.equals(aux2.elemento)) {
-                return false;
-            }
-            aux1 = aux1.siguiente;
-            aux2 = aux2.siguiente;
-        }
-        return true;
+        return false;
     }
 
 
     
     /**
-     * Metodo que invierte el orden de la lista .
-     * 
+     * Metodo que invierte el orden de la lista.
+     * Tiempo: O(n) El método cumple con este tiempo, ya que el método va recorriendo la lista 
+     * de atras para delante mientras va reasignando para invertir la lista.
+     * Espacio: O(1) Cumple con el espacio constante ya que se utiliza una sola lista
+     * a la cual le va sacando sus elementos con un nodo auxiliar y los asigna en un orden invertido
+     * en esa misma lista.
      */
     public void reverse() {
-        // Tu codigo aqui
-        return ;
+        Lista doubleLinkedList = new Lista<>();
+
+        Nodo aux = cola;
+        while(aux != null){
+            doubleLinkedList.agregaInicio(aux.elemento);
+            aux = aux.anterior;
+        }
+        clear();
+        for(int j = 0; j < doubleLinkedList.size(); j++){
+            agregaInicio((T) doubleLinkedList.get(j));
+        }
+    }
+
+    /**
+     * Obtiene el elemento en la posición <i>i</i>.
+     *
+     * @param i el índice a obtener elemento.
+     * @throws IndexOutOfBoundsException si el índice está fuera de rango.
+     */
+    public T get(int i) throws IndexOutOfBoundsException {
+
+        if( i < 0 || i >= longitud){
+            throw new IndexOutOfBoundsException();
+        }
+        if(isEmpty()){
+            return null;
+        }
+        if(i == 0){
+            return cabeza.elemento;
+        }
+        if(i == longitud-1){
+            return cola.elemento;
+        }
+        Nodo aux;
+        if(i <= longitud/2){
+            aux = cabeza;
+            for(int j = 0; j < i; j++){
+                aux = aux.siguiente;
+            }
+        }else{
+            aux = cola;
+            for(int j = longitud; j > i+1; j--){
+                aux = aux.anterior;
+            }
+        }
+        return aux.elemento;
+    }
+
+    /**
+     * Limpia la lista. Elimina todos los elementos.
+     */
+    public void clear() {
+        cabeza = null;
+        cola = null;
+        longitud = 0;
     }
 
     /**
@@ -311,18 +359,37 @@ public class Lista<T> implements Collection<T> {
      * @return una representación en cadena de la coleccion.
      * a -> b -> c -> d
      */
-    public String toString(){
-        // Tu codigo aqui
-        return "";
+    public String toString() {
+        String listaString = "";
+        Nodo nodo = cabeza;
+
+        if(longitud == 0){
+            return "";
+        }
+        
+        while(nodo != null){
+            listaString = listaString + nodo.elemento + " -> ";
+            nodo = nodo.siguiente;
+        }
+
+        return listaString.substring(0, listaString.length()-4);
     }
 
     /**
      * Junta dos listas siempre y cuando sean del mismo tipo.
+     * @return 
      * 
      */
-    public void append(Lista<T> lista) {
+    public boolean append(Lista<T> lista) {
         // Tu codigo aqui
-        return ;
+        if(this.equals(lista)){
+            Nodo nodo = lista.cabeza;
+            while(nodo != null){
+                this.add(nodo.elemento);
+                nodo = nodo.siguiente;
+            }
+        }
+        return false;
     }
 
     /**
@@ -337,20 +404,36 @@ public class Lista<T> implements Collection<T> {
      */
     public int indexOf(T elemento) {
         // Tu codigo aqui
-        return 0;
+
+        if (elemento == null){
+            throw new IllegalArgumentException("Se está intentando comparar un null");
+        }
+        Nodo nodo = cabeza;
+        int contador = 0;
+
+        while(nodo != null){
+            if(nodo.elemento == elemento){
+                return contador;
+            }
+            contador++;
+            nodo = nodo.siguiente;
+        }
+
+
+        return -1;
 
     }
     
     /**
      * Inserta un elemento en un índice explícito.
      *
-     * Si el índice es menor que cero, el elemento se agrega al inicio de la
+     * Si el índice es menor  igual que cero, el elemento se agrega al inicio de la
      * lista. Si el índice es mayor o igual que el número de elementos en la
      * lista, el elemento se agrega al fina de la misma. En otro caso, después
      * de mandar llamar el método, el elemento tendrá el índice que se
      * especifica en la lista.
      * 
-     * @param i        el índice dónde insertar el elemento. Si es menor que 0 el
+     * @param i        el índice dónde insertar el elemento. Si es menor o igual que 0 el
      *                 elemento se agrega al inicio, y si es mayor o igual que el
      *                 número
      *                 de elementos en la lista se agrega al final.
@@ -360,12 +443,59 @@ public class Lista<T> implements Collection<T> {
      */
     public void insert(int i, T elemento) {
         // Tu codigo aqui
+        if(i<=0){
+            agregaInicio(elemento);
+            this.longitud++;
+        }else if(i>=this.longitud){
+            agregaFinal(elemento);
+            this.longitud++;
+        }else{	    
+            Nodo aux = this.cabeza;
+            Nodo nuevo = new Nodo(elemento);
+            int cont = 0;
+            while(aux!=null && cont!=i){
+            aux = aux.siguiente;
+            cont++;
+            }
+            nuevo.siguiente = aux;
+            nuevo.anterior = aux.anterior;	    
+            aux.anterior.siguiente = nuevo;
+            aux.anterior = nuevo;	    	    
+            this.longitud++;
+        }
         return ;
     }
 
-    // Tu comentario
+    private Nodo getCabeza(){
+    return cabeza;
+    }
+    /* Método get para obtener a ultimo */
+    private Nodo getCola(){
+    return cola;
+    }
+    /* Método set para reasignar la cabeza */
+    private void setCabeza(Nodo cabeza){
+    this.cabeza = cabeza;
+    }
+    /* Método set para reasignar a ultimo */
+    private void setCola(Nodo cola){
+    this.cola = cola;
+    }    
+    /**
+     *Dadas 2 Listas, necesitamos unirlas de manera alternada, un elemento de la primera lista
+     *y despues uno de la segunda, y así sucesivamente.
+     *Tiempo: O(n + m). Cumple este tiempo ya que solo se recorren cada una de las listas máximo
+     *una vez.  
+     *Espacio: O(1). Se ocupa solo el espacio de las listas. 
+     */
     public void mezclaAlternada(Lista<T> lista){
-        return;
+        Nodo n = lista.getCabeza(); 
+	    int i = 1;                  
+ 	    while(n!=null){           
+	        insert(i,n.elemento);
+	        n = n.siguiente;      
+	        i = i+2;             
+	    }
     }
 
     /**
