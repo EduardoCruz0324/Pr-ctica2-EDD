@@ -239,7 +239,7 @@ public class Practica2 {
         origen.push(2);
         origen.push(1);
 	
-        //torresHanoi(5, origen, auxiliar, destino); //AQUÍ
+        torresHanoi(5, origen, auxiliar, destino); //AQUÍ
 
 
         binarioColas(25);
