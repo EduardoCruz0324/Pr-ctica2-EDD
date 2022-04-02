@@ -1,5 +1,5 @@
-## Nombres ->
-        ->
+## Nombres ->José Eduardo Cruz Campos
+        ->Miguel Agustín Martínez Herrera
 
 compilar -> javac -d . src/Estructuras/*.java
 
